@@ -23,7 +23,7 @@ class ovirt::engine(
 ) inherits ovirt {
 
   $conf = "${engine_setup_conf_d}/${engine_setup_conf_d_name}"
-  $passfile = "${engine_setup_conf_d}/${engine_admin_password_filename}"
+  $ovirtadminpassfile = "${engine_setup_conf_d}/${engine_admin_password_filename}"
 
   package { $engine_service_package:
     ensure => $engine_service_package_ensure,
@@ -41,7 +41,7 @@ class ovirt::engine(
 
   if $engine_admin_password {
     file { 'ovirt-admin-password':
-      path    => $passfile,
+      path    => $ovirtadminpassfile,
       owner   => 'root',
       group   => 'kvm',
       mode    => '0640',
@@ -67,7 +67,7 @@ OVESETUP_CONFIG/adminPassword=str:${engine_admin_password}
     require     => [ File['pre-seed answers'], File['ovirt-admin-password'], ],
     refreshonly => true,
     path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
-    command     => "engine-setup",
+    command     => 'engine-setup',
     logoutput   => true,
     timeout     => 1850,
     before      => Service[$engine_service_package],

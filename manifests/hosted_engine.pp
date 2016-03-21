@@ -35,9 +35,8 @@ class ovirt::hosted_engine(
     content => template('ovirt/etc/otopi.conf.d/hosted-engine.erb'),
     before  => Service[$ovirt::node::node_service_name],
     require => [
-                 Package[$hosted_engine_service_package],
-                 File[$hosted_engine_setup_conf_d],
-               ],
+                  Package[$hosted_engine_service_package],
+                  File[$hosted_engine_setup_conf_d], ],
   }
 
   service { $hosted_engine_services:
