@@ -30,7 +30,7 @@ class ovirt::engine(
     notify => Exec['run engine-setup'],
   }
 
-  file { 'pre-seed answers':
+  file { 'engine pre-seed answers':
     path    => $conf,
     owner   => 'root',
     group   => 'kvm',
@@ -64,7 +64,7 @@ OVESETUP_CONFIG/adminPassword=str:${engine_admin_password}
   # if you've set ensure=> latest on th engine, thus
   # performing your post install update step
   exec { 'run engine-setup':
-    require     => [ File['pre-seed answers'], File['ovirt-admin-password'], ],
+    require     => [ File['engine pre-seed answers'], File['ovirt-admin-password'], ],
     refreshonly => true,
     path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
     command     => 'engine-setup',

@@ -13,7 +13,7 @@ class ovirt::params {
 
   $engine_service_name      = 'ovirt-engine'
   $engine_service_ensure    = 'running'
-  $engine_service_enable    = true
+  $engine_service_enable    = false
 
   $engine_setup_conf_d      = '/etc/ovirt-engine-setup.conf.d'
   $engine_setup_answers     = '/var/lib/ovirt-engine/setup/answers/*.conf'
@@ -32,9 +32,9 @@ class ovirt::params {
   $engine_iso_domain_name      = 'ISO_DOMAIN'
   $engine_iso_domain_location  = '/var/lib/exports/iso'
   if $::domain {
-    $engine_iso_domain_acl     = "*.${::domain}(ro)"
+    $engine_iso_domain_acl     = "${::fqdn}(rw) *.${::domain}(ro,insecure)"
   } else {
-    $engine_iso_domain_acl     = '*(ro)'
+    $engine_iso_domain_acl     = "${::fqdn}(rw) *(ro,insecure)"
   }
 
   if $::organization {

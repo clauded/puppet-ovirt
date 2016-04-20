@@ -27,7 +27,7 @@ class ovirt::hosted_engine(
     require => Package[$hosted_engine_service_package],
   }
 
-  file { 'pre-seed answers':
+  file { 'hosted pre-seed answers':
     path    => $conf,
     owner   => 'root',
     group   => 'kvm',
