@@ -1,6 +1,6 @@
 {
   "name": "jcpunk-ovirt",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "jcpunk",
   "summary": "Install oVirt node, engine, and hosted engine",
   "license": "Apache 2.0",

@@ -18,7 +18,7 @@ class ovirt::node (
   }
 
   sasl::application {'libvirt':
-    mech_list      => 'digest-md5',
+    mech_list      => ['digest-md5',],
     pwcheck_method => 'auxprop',
     auxprop_plugin => 'sasldb',
     sasldb_path    => '/etc/libvirt/passwd.db',
@@ -27,7 +27,7 @@ class ovirt::node (
   }
 
   sasl::application {'qemu-kvm':
-    mech_list      => 'digest-md5',
+    mech_list      => ['digest-md5',],
     pwcheck_method => 'auxprop',
     auxprop_plugin => 'sasldb',
     sasldb_path    => '/etc/qemu/passwd.db',
