@@ -1,6 +1,6 @@
 {
   "name": "jcpunk-ovirt",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "jcpunk",
   "summary": "Install oVirt node, engine, and hosted engine",
   "license": "Apache 2.0",
@@ -27,7 +27,8 @@
     }
   ],
   "dependencies": [
-    { "name": "puppetlabs-stdlib", "version_range": ">= 1.0.0" }
+    { "name": "puppetlabs-stdlib", "version_range": ">= 1.0.0" },
+    { "name": "bodgit-sasl", "version_range": ">= 1.1.1" }
   ]
 }
 

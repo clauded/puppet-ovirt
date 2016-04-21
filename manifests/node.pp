@@ -17,4 +17,22 @@ class ovirt::node (
     require => Package[$node_service_package],
   }
 
+  sasl::application {'libvirt':
+    mech_list      => 'digest-md5',
+    pwcheck_method => 'auxprop',
+    auxprop_plugin => 'sasldb',
+    sasldb_path    => '/etc/libvirt/passwd.db',
+    require        => Class['::sasl'],
+    before         => Service[$node_service_name],
+  }
+
+  sasl::application {'qemu-kvm':
+    mech_list      => 'digest-md5',
+    pwcheck_method => 'auxprop',
+    auxprop_plugin => 'sasldb',
+    sasldb_path    => '/etc/qemu/passwd.db',
+    require        => Class['::sasl'],
+    before         => Service[$node_service_name],
+  }
+
 }
