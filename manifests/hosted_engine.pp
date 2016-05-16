@@ -72,7 +72,7 @@ class ovirt::hosted_engine (
     logoutput   => true,
     timeout     => 1850,
     refreshonly => true,
-    before      => Service[$hosted_engine_services],
+    #before      => Service[$hosted_engine_services],
     require     => [
       File['hosted pre-seed answers'],
       File['ovirt-admin-password'],
