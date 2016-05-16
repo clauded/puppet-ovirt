@@ -1,6 +1,7 @@
 # == Class: ovirt::hosted_engine
 class ovirt::hosted_engine (
   $engine_admin_password                = $ovirt::engine_admin_password,
+  $engine_admin_password_filename       = $ovirt::engine_admin_password_filename,
   $hosted_engine_fqdn                   = $ovirt::hosted_engine_fqdn,
   $hosted_engine_service_package        = $ovirt::hosted_engine_service_package,
   $hosted_engine_service_package_ensure = $ovirt::hosted_engine_service_package_ensure,
@@ -17,7 +18,7 @@ class ovirt::hosted_engine (
 ) inherits ovirt::node {
 
   $conf               = "${hosted_engine_setup_conf_d}/${hosted_engine_setup_conf_d_name}"
-  #$ovirtadminpassfile = "${hosted_engine_setup_conf_d}/${hosted_engine_admin_password_filename}"
+  $ovirtadminpassfile = "${hosted_engine_setup_conf_d}/${engine_admin_password_filename}"
 
   package { $hosted_engine_service_package:
     ensure => $hosted_engine_service_package_ensure,
@@ -49,7 +50,7 @@ class ovirt::hosted_engine (
       group   => 'kvm',
       mode    => '0640',
       content => "[environment:default]\nOVESETUP_CONFIG/adminPassword=str:${engine_admin_password}\n",
-      require => Package[$engine_service_package],
+      require => Package[$hosted_engine_service_package],
     }
   } else {
     fail('engine_admin_password cannot be undefined')
