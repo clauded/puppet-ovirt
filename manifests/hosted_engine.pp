@@ -16,7 +16,8 @@ class ovirt::hosted_engine (
   $hosted_engine_gb_storage             = $ovirt::hosted_engine_gb_storage,
 ) inherits ovirt::node {
 
-  $conf = "${hosted_engine_setup_conf_d}/${hosted_engine_setup_conf_d_name}"
+  $conf               = "${hosted_engine_setup_conf_d}/${hosted_engine_setup_conf_d_name}"
+  #$ovirtadminpassfile = "${hosted_engine_setup_conf_d}/${hosted_engine_admin_password_filename}"
 
   package { $hosted_engine_service_package:
     ensure => $hosted_engine_service_package_ensure,
@@ -47,7 +48,7 @@ class ovirt::hosted_engine (
       owner   => 'root',
       group   => 'kvm',
       mode    => '0640',
-      content => "[environment:default]\nOVESETUP_CONFIG/adminPassword=str:${engine_admin_password}\n"
+      content => "[environment:default]\nOVESETUP_CONFIG/adminPassword=str:${engine_admin_password}\n",
       require => Package[$engine_service_package],
     }
   } else {
