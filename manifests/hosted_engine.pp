@@ -56,17 +56,18 @@ class ovirt::hosted_engine (
     fail('engine_admin_password cannot be undefined')
   }
 
-  service { $hosted_engine_services:
-    ensure  => $hosted_engine_service_ensure,
-    enable  => $hosted_engine_service_enable,
-    require => Package[$hosted_engine_service_package],
-  }
+  #service { $hosted_engine_services:
+  #  ensure  => $hosted_engine_service_ensure,
+  #  enable  => $hosted_engine_service_enable,
+  #  require => Package[$hosted_engine_service_package],
+  #}
 
   # This is configured to automatically run ovirt-hosted-engine-setup
   # if you've set ensure=> latest on th engine, thus
   # performing your post install update step
   exec { 'run hosted-engine-deploy':
-    command     => 'hosted-engine --deploy',
+   # TODO: installer au prealable ovirt-engine-appliance-3.6-20160420.1.el7.centos.noarch.rpm
+   command     => 'hosted-engine --deploy',
     path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
     logoutput   => true,
     timeout     => 1850,
