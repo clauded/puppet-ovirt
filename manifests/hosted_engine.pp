@@ -21,7 +21,7 @@ class ovirt::hosted_engine (
 
   package { $hosted_engine_service_package:
     ensure => $hosted_engine_service_package_ensure,
-    #notify => Exec['run hosted-engine-setup'],
+    #notify => Exec['run hosted-engine-deploy'],
   }
 
   file { $hosted_engine_setup_conf_d:
@@ -64,8 +64,8 @@ class ovirt::hosted_engine (
   # This is configured to automatically run ovirt-hosted-engine-setup
   # if you've set ensure=> latest on th engine, thus
   # performing your post install update step
-  exec { 'run hosted-engine-setup':
-    command     => 'ovirt-hosted-engine-setup',
+  exec { 'run hosted-engine-deploy':
+    command     => 'hosted-engine --deploy',
     path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
     logoutput   => true,
     timeout     => 1850,
