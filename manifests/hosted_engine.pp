@@ -25,23 +25,23 @@ class ovirt::hosted_engine (
     #notify => Exec['run hosted-engine-deploy'],
   }
 
-  file { $hosted_engine_setup_conf_d:
-    ensure  => directory,
-    require => Package[$hosted_engine_service_package],
-  }
+  #file { $hosted_engine_setup_conf_d:
+  #  ensure  => directory,
+  #  require => Package[$hosted_engine_service_package],
+  #}
 
-  file { 'hosted pre-seed answers':
-    path    => $conf,
-    owner   => 'root',
-    group   => 'kvm',
-    mode    => '0600',
-    content => template('ovirt/etc/otopi.conf.d/hosted-engine.erb'),
-    before  => Service[$ovirt::node::node_service_name],
-    require => [
-      Package[$hosted_engine_service_package],
-      File[$hosted_engine_setup_conf_d],
-    ],
-  }
+  #file { 'hosted pre-seed answers':
+  #  path    => $conf,
+  #  owner   => 'root',
+  #  group   => 'kvm',
+  #  mode    => '0600',
+  #  content => template('ovirt/etc/otopi.conf.d/hosted-engine.erb'),
+  #  before  => Service[$ovirt::node::node_service_name],
+  #  require => [
+  #    Package[$hosted_engine_service_package],
+  #    File[$hosted_engine_setup_conf_d],
+  #  ],
+  #}
 
   if $engine_admin_password {
     file { 'ovirt-admin-password':
