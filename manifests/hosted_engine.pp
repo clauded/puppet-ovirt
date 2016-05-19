@@ -43,18 +43,18 @@ class ovirt::hosted_engine (
   #  ],
   #}
 
-  if $engine_admin_password {
-    file { 'ovirt-admin-password':
-      path    => $ovirtadminpassfile,
-      owner   => 'root',
-      group   => 'kvm',
-      mode    => '0640',
-      content => "[environment:default]\nOVESETUP_CONFIG/adminPassword=str:${engine_admin_password}\n",
-      require => Package[$hosted_engine_service_package],
-    }
-  } else {
-    fail('engine_admin_password cannot be undefined')
-  }
+  #if $engine_admin_password {
+  #  file { 'ovirt-admin-password':
+  #    path    => $ovirtadminpassfile,
+  #    owner   => 'root',
+  #    group   => 'kvm',
+  #    mode    => '0640',
+  #    content => "[environment:default]\nOVESETUP_CONFIG/adminPassword=str:${engine_admin_password}\n",
+  #    require => Package[$hosted_engine_service_package],
+  #  }
+  #} else {
+  #  fail('engine_admin_password cannot be undefined')
+  #}
 
   #service { $hosted_engine_services:
   #  ensure  => $hosted_engine_service_ensure,
