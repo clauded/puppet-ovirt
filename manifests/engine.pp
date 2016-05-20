@@ -60,7 +60,7 @@ class ovirt::engine (
   }
 
   # This is configured to automatically run engine-setup
-  # if you've set ensure=> latest on th engine, thus
+  # if you've set ensure=> latest on the engine, thus
   # performing your post install update step
   exec { 'run engine-setup':
     command     => 'engine-setup',

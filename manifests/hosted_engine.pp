@@ -1,7 +1,6 @@
 # == Class: ovirt::hosted_engine
 class ovirt::hosted_engine (
   $engine_admin_password                = $ovirt::engine_admin_password,
-  $engine_admin_password_filename       = $ovirt::engine_admin_password_filename,
   $hosted_engine_fqdn                   = $ovirt::hosted_engine_fqdn,
   $hosted_engine_service_package        = $ovirt::hosted_engine_service_package,
   $hosted_engine_service_package_ensure = $ovirt::hosted_engine_service_package_ensure,
@@ -24,6 +23,15 @@ class ovirt::hosted_engine (
     ensure => $hosted_engine_service_package_ensure,
     #notify => Exec['run hosted-engine-deploy'],
   }
+
+  #file { 'engine pre-seed answers':
+  #  path    => $conf,
+  #  owner   => 'root',
+  #  group   => 'kvm',
+  #  mode    => '0640',
+  #  content => template('ovirt/etc/ovirt-engine-setup.conf.d/answers.erb'),
+  #  require => Package[$engine_service_package],
+  #}
 
   #file { $hosted_engine_setup_conf_d:
   #  ensure  => directory,
@@ -63,19 +71,19 @@ class ovirt::hosted_engine (
   #}
 
   # This is configured to automatically run ovirt-hosted-engine-setup
-  # if you've set ensure=> latest on th engine, thus
+  # if you've set ensure=> latest on the hosted-engine, thus
   # performing your post install update step
   exec { 'run hosted-engine-deploy':
    # TODO: installer au prealable ovirt-engine-appliance-3.6-20160420.1.el7.centos.noarch.rpm
-   command     => 'hosted-engine --deploy',
+   command      => 'hosted-engine --deploy',
     path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
     logoutput   => true,
     timeout     => 1850,
     refreshonly => true,
     #before      => Service[$hosted_engine_services],
-    require     => [
-      File['hosted pre-seed answers'],
-      File['ovirt-admin-password'],
-    ],
+    #require     => [
+    #  File['hosted pre-seed answers'],
+    #  File['ovirt-admin-password'],
+    #],
   }
 }
