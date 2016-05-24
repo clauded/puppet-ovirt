@@ -59,7 +59,7 @@ class ovirt::hosted_engine (
     logoutput   => true,
     timeout     => 1850,
     refreshonly => true,
-    before      => Service[$hosted_engine_services],
+    before      => Service[$hosted_engine_service_name],
   }
 
   service { $hosted_engine_service_name:
