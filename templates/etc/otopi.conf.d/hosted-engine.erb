@@ -1,37 +1,88 @@
 # action=setup
 [environment:default]
+OVEHOSTED_CORE/screenProceed=none:None
+OVEHOSTED_CORE/deployProceed=bool:True
+OVEHOSTED_CORE/confirmSettings=bool:True
+
+OVEHOSTED_ENGINE/insecureSSL=none:None
+OVEHOSTED_ENGINE/clusterName=str:Default
+
 <% if @hosted_engine_fqdn -%>
 OVEHOSTED_NETWORK/fqdn=str:<%= @hosted_engine_fqdn %>
-OVEHOSTED_ENGINE/appHostName=str:<%= @hosted_engine_fqdn %>
+<% end -%>
+OVEHOSTED_NETWORK/bridgeName=str:ovirtmgmt
+<% if @node_updateFirewall -%>
+<% if @osfamily == 'RedHat' -%>
+<% if @operatingsystemmajrelease <= '7' -%>
+OVEHOSTED_NETWORK/firewallManager=str:iptables
+<% else -%>
+OVEHOSTED_NETWORK/firewallManager=str:firewalld
+<% end -%>
+<% end -%>
 <% end -%>
 <% if @hosted_engine_gateway -%>
 OVEHOSTED_NETWORK/gateway=str:<%= @hosted_engine_gateway %>
 <% end -%>
+
+OVEHOSTED_STORAGE/domainType=str:<%= @hosted_engine_domaintype %>
 OVEHOSTED_STORAGE/imgSizeGB=str:<%= @hosted_engine_gb_storage %>
+OVEHOSTED_STORAGE/storageDatacenterName=str:hosted_datacenter
+OVEHOSTED_STORAGE/storageDomainName=str:hosted_storage
+<% if @hosted_engine_domainconnection -%>
+OVEHOSTED_STORAGE/storageDomainConnection=str:<%= @hosted_engine_domainconnection %>
+<% end %>
+<% if @hosted_engine_iscsiportalipaddress -%>
+OVEHOSTED_STORAGE/iSCSIPortalIPAddress=none:<%= @hosted_engine_iscsiportalipaddress %>
+<% end %>
+<% if @hosted_engine_iscsiportalport -%>
+OVEHOSTED_STORAGE/iSCSIPortalPort=none:<%= @hosted_engine_iscsiportalport %>
+<% end %>
+<% if @hosted_engine_iscsiportaluser -%>
+OVEHOSTED_STORAGE/iSCSIPortalUser=none:<%= @hosted_engine_iscsiportaluser %>
+<% end %>
+<% if @hosted_engine_iscsiportal -%>
+OVEHOSTED_STORAGE/iSCSIPortal=none:<%= @hosted_engine_iscsiportal %>
+<% end %>
+<% if @hosted_engine_iscsitargetname -%>
+OVEHOSTED_STORAGE/iSCSITargetName=none:<%= @hosted_engine_iscsitargetname %>
+<% end %>
+OVEHOSTED_STORAGE/glusterProvisionedShareName=str:hosted_engine_glusterfs
+OVEHOSTED_STORAGE/glusterProvisioningEnabled=bool:False
+
 OVEHOSTED_VM/vmMemSizeMB=int:<%= @hosted_engine_mb_ram %>
 OVEHOSTED_VM/vmVCpus=str:<%= @hosted_engine_num_cpu %>
 <% if @hosted_engine_mac_address -%>
 OVEHOSTED_VM/vmMACAddr=str:<%= @hosted_engine_mac_address %>
 <% end -%>
+
 <% if @engine_admin_password -%>
 OVEHOSTED_ENGINE/adminPassword=str:<%= @engine_admin_password %>
 <% end -%>
-<% if @node_updateFirewall -%>
-  <% if @osfamily == 'RedHat' -%>
-    <% if @operatingsystemmajrelease <= '7' -%>
-OVEHOSTED_NETWORK/firewallManager=str:iptables
-    <% else -%>
-OVEHOSTED_NETWORK/firewallManager=str:firewalld
-    <% end -%>
-  <% end -%>
-<% end -%>
-OVEHOSTED_NETWORK/bridgeName=str:ovirtmgmt
 OVEHOSTED_ENGINE/clusterName=str:Default
-OVEHOSTED_STORAGE/storageDatacenterName=str:hosted_datacenter
-OVEHOSTED_STORAGE/glusterProvisionedShareName=str:hosted_engine_glusterfs
-OVEHOSTED_STORAGE/storageDomainName=str:hosted_storage
+<% if @hosted_engine_fqdn -%>
+OVEHOSTED_ENGINE/appHostName=str:<%= @hosted_engine_fqdn %>
+<% end -%>
+
+OVEHOSTED_VM/vmMemSizeMB=int:16384
+OVEHOSTED_VM/vmBoot=str:disk
+OVEHOSTED_VM/vmVCpus=str:4
+OVEHOSTED_VM/ovfArchive=str:/usr/share/ovirt-engine-appliance/ovirt-engine-appliance-3.6-20160420.1.el7.centos.ova
+OVEHOSTED_VM/cloudinitInstanceDomainName=str:cptaq.local
+OVEHOSTED_VM/cloudinitExecuteEngineSetup=bool:True
+OVEHOSTED_VM/cloudinitInstanceHostName=str:ovirt-manager.cptaq.local
+OVEHOSTED_VM/cloudinitVMStaticCIDR=str:10.17.76.194/26
+OVEHOSTED_VM/cloudInitISO=str:generate
+OVEHOSTED_VM/cloudinitVMETCHOSTS=bool:False
+OVEHOSTED_VM/cloudinitVMDNS=str:10.17.76.4,10.17.76.2
+
 OVEHOSTED_VDSM/consoleType=str:qxl
+OVEHOSTED_VDSM/spicePkiSubject=str:C=EN, L=Test, O=Test, CN=Test
+OVEHOSTED_VDSM/caSubject=str:/C=EN/L=Test/O=Test/CN=TestCA
+OVEHOSTED_VDSM/cpu=str:model_SandyBridge
+OVEHOSTED_VDSM/pkiSubject=str:/C=EN/L=Test/O=Test/CN=Test
+
 OVEHOSTED_NOTIF/smtpPort=str:25
-OVEHOSTED_NOTIF/smtpServer=str:localhost
-OVEHOSTED_NOTIF/sourceEmail=str:ovirt@localhost
-OVEHOSTED_NOTIF/destEmail=str:root@localhost
+OVEHOSTED_NOTIF/smtpServer=str:courriel.cptaq.local
+OVEHOSTED_NOTIF/sourceEmail=str:ovirt-manager@cptaq.local
+OVEHOSTED_NOTIF/destEmail=str:admreseau@cptaq.gouv.qc.ca
+
