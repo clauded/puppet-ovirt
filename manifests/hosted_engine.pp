@@ -3,7 +3,7 @@ class ovirt::hosted_engine (
 
   $engine_answers_file                  = $ovirt::engine_answers_file,
 
-  $hosted_engine_setup_conf_d           = $ovirt::hosted_engine_setup_conf_d
+  $hosted_engine_setup_conf_d           = $ovirt::hosted_engine_setup_conf_d,
   $hosted_engine_answers_file           = $ovirt::hosted_engine_answers_file,
   $hosted_engine_service_package        = $ovirt::hosted_engine_service_package,
   $hosted_engine_service_package_ensure = $ovirt::hosted_engine_service_package_ensure,

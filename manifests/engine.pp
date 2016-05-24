@@ -2,7 +2,7 @@
 class ovirt::engine (
 
   $engine_answers_file           = $ovirt::engine_answers_file,
-  $engine_setup_conf_d           = $ovirt::engine_setup_conf_d
+  $engine_setup_conf_d           = $ovirt::engine_setup_conf_d,
   $engine_service_package        = $ovirt::engine_service_package,
   $engine_service_package_ensure = $ovirt::engine_service_package_ensure,
   $engine_service_name           = $ovirt::engine_service_name,
