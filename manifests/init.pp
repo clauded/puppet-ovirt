@@ -38,11 +38,11 @@ class ovirt (
     include ovirt::node
   }
 
-  if $hosted_engine_service_enable == true {
+  if $hosted_engine_service_enabled == true {
     include ovirt::hosted_engine
   }
 
-  if $engine_service_enable == true {
+  if $engine_service_enabled == true {
     include ovirt::engine
   }
 
