@@ -1,9 +1,9 @@
 # == Class: ovirt
 class ovirt (
 
-  $ovirt_repo_manage       = $ovirt::ovirt_repo_manage
-  $ovirt_repo_package_name = $ovirt::ovirt_repo_package_name
-  $ovirt_version           = $ovirt::ovirt_version
+  $ovirt_repo_manage       = $ovirt::ovirt_repo_manage,
+  $ovirt_repo_package_name = $ovirt::ovirt_repo_package_name,
+  $ovirt_version           = $ovirt::ovirt_version,
 
   $node_service_package        = $ovirt::node_service_package,
   $node_service_package_ensure = $ovirt::node_service_package_ensure,
@@ -12,14 +12,14 @@ class ovirt (
   $node_service_enabled        = $ovirt::node_service_enabled,
 
   $engine_answers_file           = $ovirt::engine_answers_file,
-  $engine_setup_conf_d           = $ovirt::engine_setup_conf_d
+  $engine_setup_conf_d           = $ovirt::engine_setup_conf_d,
   $engine_service_package        = $ovirt::engine_service_package,
   $engine_service_package_ensure = $ovirt::engine_service_package_ensure,
   $engine_service_name           = $ovirt::engine_service_name,
   $engine_service_ensure         = $ovirt::engine_service_ensure,
   $engine_service_enabled        = $ovirt::engine_service_enabled,
 
-  $hosted_engine_setup_conf_d           = $ovirt::hosted_engine_setup_conf_d
+  $hosted_engine_setup_conf_d           = $ovirt::hosted_engine_setup_conf_d,
   $hosted_engine_answers_file           = $ovirt::hosted_engine_answers_file,
   $hosted_engine_service_package        = $ovirt::hosted_engine_service_package,
   $hosted_engine_service_package_ensure = $ovirt::hosted_engine_service_package_ensure,
