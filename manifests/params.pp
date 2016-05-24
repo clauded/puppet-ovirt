@@ -19,8 +19,8 @@ class ovirt::params {
   $engine_setup_conf_d           = '/etc/ovirt-engine-setup.conf.d'
   $engine_answers_file           = ""
 
-  $hosted_engine_service_package        = 'ovirt-hosted-engine-setup',
-  $hosted_engine_service_package_ensure = 'installed',
+  $hosted_engine_service_package        = 'ovirt-hosted-engine-setup'
+  $hosted_engine_service_package_ensure = 'installed'
   $hosted_engine_service_name           = ['ovirt-ha-agent.service', 'ovirt-ha-broker.service']
   $hosted_engine_service_ensure         = 'running'
   $hosted_engine_service_enable         = false
