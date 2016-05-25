@@ -73,6 +73,15 @@ class ovirt::hosted_engine (
     }
   }
 
+  # don't require tty for hosted_engine_deploy to work
+  file { '/etc/sudoers.d/01_dont_requiretty':
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0440',
+    content => "Defaults    !requiretty\n",
+    before  => Exec['hosted_engine_deploy'],
+  }
+
   exec { 'hosted_engine_deploy':
     command     => 'hosted-engine --deploy && touch /etc/puppet/hosted_engine_deploy.done',
     path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
