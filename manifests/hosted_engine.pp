@@ -25,14 +25,19 @@ class ovirt::hosted_engine (
   }
 
   if $ovirt_engine_appliance_ensure == 'installed' {
-    exec { 'install_ovirt_engine_appliance_package':
-      command   =>
-        "wget $ovirt_engine_appliance_package_name -O ${ovirt_engine_appliance_file} && \
-         rpm -i ${ovirt_engine_appliance_file}",
+    exec { 'wget_ovirt_engine_appliance_package':
+      command   => "wget $ovirt_engine_appliance_package_name -O ${ovirt_engine_appliance_file}",
       path      => '/usr/bin/:/bin/:/sbin:/usr/sbin',
       logoutput => true,
-      timeout   => 1200,
+      timeout   => 1800,
       creates   => $ovirt_engine_appliance_file,
+      before    => Exec['install_ovirt_engine_appliance_package'],
+    }
+    exec { 'install_ovirt_engine_appliance_package':
+      command   => "rpm -i ${ovirt_engine_appliance_file} && touch /etc/puppet/install_ovirt_engine_appliance_package.done",
+      path      => '/usr/bin/:/bin/:/sbin:/usr/sbin',
+      logoutput => true,
+      creates   => '/etc/puppet/install_ovirt_engine_appliance_package.done',
       before    => Exec['hosted_engine_deploy'],
       require   => Package[$hosted_engine_service_package],
     }

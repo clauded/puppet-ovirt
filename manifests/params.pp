@@ -6,7 +6,7 @@ class ovirt::params {
   $ovirt_version                        = '3.6'
   $ovirt_engine_appliance_package_name  = 'http://resources.ovirt.org/pub/ovirt-3.6/rpm/el7/noarch/ovirt-engine-appliance-3.6-20160524.1.el7.centos.noarch.rpm'
   $ovirt_engine_appliance_file          = '/root/ovirt-engine-appliance-3.6-20160524.1.el7.centos.noarch.rpm'
-  $ovirt_engine_appliance_ensure        = 'installed'
+  $ovirt_engine_appliance_ensure        = 'absent'
 
   $node_service_package                 = 'vdsm'
   $node_service_package_ensure          = 'installed'
@@ -20,7 +20,7 @@ class ovirt::params {
   $engine_service_ensure                = 'running'
   $engine_service_enable                = false
   $engine_setup_conf_d                  = '/etc/ovirt-engine-setup.conf.d'
-  $engine_answers_file                  = ""
+  $engine_answers_file                  = 'puppet:///modules/ovirt/engine_answers.conf'
 
   $hosted_engine_service_package        = 'ovirt-hosted-engine-setup'
   $hosted_engine_service_package_ensure = 'installed'
@@ -28,7 +28,7 @@ class ovirt::params {
   $hosted_engine_service_ensure         = 'running'
   $hosted_engine_service_enable         = false
   $hosted_engine_setup_conf_d           = '/etc/otopi.conf.d'
-  $hosted_engine_answers_file           = ""
+  $hosted_engine_answers_file           = 'puppet:///modules/ovirt/hosted_engine_answers.conf'
   $hosted_engine_run_engine_setup       = true
 
 }
