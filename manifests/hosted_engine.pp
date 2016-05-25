@@ -21,7 +21,7 @@ class ovirt::hosted_engine (
 
   package { $hosted_engine_service_package:
     ensure => $hosted_engine_service_package_ensure,
-    notify => Exec['hosted_engine_deploy'],
+    #notify => Exec['hosted_engine_deploy'],
   }
 
   if $ovirt_engine_appliance_ensure == 'installed' {
@@ -74,11 +74,12 @@ class ovirt::hosted_engine (
   }
 
   exec { 'hosted_engine_deploy':
-    command     => 'hosted-engine --deploy',
+    command     => 'hosted-engine --deploy && touch /etc/puppet/hosted_engine_deploy.done',
     path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
     logoutput   => true,
     timeout     => 1800,
-    refreshonly => true,
+    #refreshonly => true,
+    creates     => '/etc/puppet/hosted_engine_deploy.done',
     before      => Service[$hosted_engine_service_name],
   }
 

@@ -15,7 +15,7 @@ class ovirt::engine (
 
   package { $engine_service_package:
     ensure => $engine_service_package_ensure,
-    notify => Exec['engine_setup'],
+    #notify => Exec['engine_setup'],
   }
 
   file { $engine_setup_conf_d:
@@ -37,11 +37,12 @@ class ovirt::engine (
   }
 
   exec { 'engine_setup':
-    command     => 'engine-setup',
+    command     => 'engine-setup && touch /etc/puppet/engine_setup.done',
     path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
     logoutput   => true,
     timeout     => 1800,
-    refreshonly => true,
+    #refreshonly => true,
+    creates     => '/etc/puppet/engine_setup.done',
     before      => Service[$engine_service_name],
   }
 
