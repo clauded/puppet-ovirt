@@ -22,7 +22,7 @@ class ovirt::engine (
     ensure  => directory,
     owner   => 'root',
     group   => 'kvm',
-    mode    => '0640',
+    mode    => '0750',
     require => Package[$engine_service_package],
   }
 

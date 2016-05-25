@@ -47,7 +47,7 @@ class ovirt::hosted_engine (
     ensure  => directory,
     owner   => 'root',
     group   => 'kvm',
-    mode    => '0640',
+    mode    => '0750',
     require => Package[$hosted_engine_service_package],
   }
 
