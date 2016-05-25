@@ -47,7 +47,7 @@ class ovirt::hosted_engine (
     ensure  => directory,
     owner   => 'root',
     group   => 'kvm',
-    mode    => '0600',
+    mode    => '0640',
     require => Package[$hosted_engine_service_package],
   }
 
@@ -55,7 +55,7 @@ class ovirt::hosted_engine (
     path    => "${hosted_engine_setup_conf_d}/hosted_engine_answers.conf",
     owner   => 'root',
     group   => 'kvm',
-    mode    => '0600',
+    mode    => '0640',
     source  => $hosted_engine_answers_file,
     before  => Exec['hosted_engine_deploy'],
     require => File[$hosted_engine_setup_conf_d],
@@ -66,7 +66,7 @@ class ovirt::hosted_engine (
       path    => "${hosted_engine_setup_conf_d}/engine_answers.conf",
       owner   => 'root',
       group   => 'kvm',
-      mode    => '0600',
+      mode    => '0640',
       source  => $engine_answers_file,
       before  => Exec['hosted_engine_deploy'],
       require => File[$hosted_engine_setup_conf_d],

@@ -22,7 +22,7 @@ class ovirt::engine (
     ensure  => directory,
     owner   => 'root',
     group   => 'kvm',
-    mode    => '0600',
+    mode    => '0640',
     require => Package[$engine_service_package],
   }
 
@@ -30,7 +30,7 @@ class ovirt::engine (
     path    => "${engine_setup_conf_d}/engine_answers.conf",
     owner   => 'root',
     group   => 'kvm',
-    mode    => '0600',
+    mode    => '0640',
     source  => $engine_answers_file,
     before  => Exec['engine_setup'],
     require => File[$engine_setup_conf_d],
