@@ -1,4 +1,5 @@
 # == Class: ovirt::hosted_engine
+
 class ovirt::hosted_engine (
 
   $engine_answers_file                  = $ovirt::engine_answers_file,
@@ -11,6 +12,9 @@ class ovirt::hosted_engine (
   $hosted_engine_service_ensure         = $ovirt::hosted_engine_service_ensure,
   $hosted_engine_service_enabled        = $ovirt::hosted_engine_service_enabled,
   $hosted_engine_run_engine_setup       = $ovirt::hosted_engine_run_engine_setup,
+  $ovirt_engine_appliance_package_name  = $ovirt::ovirt_engine_appliance_package_name,
+  $ovirt_engine_appliance_file          = $ovirt::ovirt_engine_appliance_file,
+  $ovirt_engine_appliance_ensure        = $ovirt::ovirt_engine_appliance_ensure,
 
 
 ) inherits ovirt::node {
@@ -20,11 +24,25 @@ class ovirt::hosted_engine (
     notify => Exec['hosted_engine_deploy'],
   }
 
+  if $ovirt_engine_appliance_ensure == 'installed' {
+    exec { 'install_ovirt_engine_appliance_package':
+      command   =>
+        "wget $ovirt_engine_appliance_package_name -O ${ovirt_engine_appliance_file} && \
+         rpm -i ${ovirt_engine_appliance_file}",
+      path      => '/usr/bin/:/bin/:/sbin:/usr/sbin',
+      logoutput => true,
+      timeout   => 1200,
+      creates   => $ovirt_engine_appliance_file,
+      before    => Exec['hosted_engine_deploy'],
+      require   => Package[$hosted_engine_service_package],
+    }
+  }
+
   file { $hosted_engine_setup_conf_d:
     ensure  => directory,
     owner   => 'root',
     group   => 'kvm',
-    mode    => '0640',
+    mode    => '0600',
     require => Package[$hosted_engine_service_package],
   }
 
@@ -50,14 +68,11 @@ class ovirt::hosted_engine (
     }
   }
 
-  # This is configured to automatically run ovirt-hosted-engine-setup
-  # if you've set ensure=>latest on the hosted-engine.
   exec { 'hosted_engine_deploy':
-    # TODO: pre-install ovirt-engine-appliance-3.6-20160420.1.el7.centos.noarch.rpm
-    command      => 'hosted-engine --deploy',
+    command     => 'hosted-engine --deploy',
     path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
     logoutput   => true,
-    timeout     => 1850,
+    timeout     => 1800,
     refreshonly => true,
     before      => Service[$hosted_engine_service_name],
   }

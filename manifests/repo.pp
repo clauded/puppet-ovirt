@@ -1,3 +1,5 @@
+# == Class: ovirt::repo
+
 class ovirt::repo (
 
   $ovirt_repo_manage       = $ovirt::ovirt_repo_manage,

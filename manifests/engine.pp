@@ -1,4 +1,5 @@
 # == Class: ovirt::engine
+
 class ovirt::engine (
 
   $engine_answers_file           = $ovirt::engine_answers_file,
@@ -21,7 +22,7 @@ class ovirt::engine (
     ensure  => directory,
     owner   => 'root',
     group   => 'kvm',
-    mode    => '0640',
+    mode    => '0600',
     require => Package[$engine_service_package],
   }
 
@@ -35,14 +36,11 @@ class ovirt::engine (
     require => File[$engine_setup_conf_d],
   }
 
-  # This is configured to automatically run ovirt-hosted-engine-setup
-  # if you've set ensure=>latest on the hosted-engine.
   exec { 'engine_setup':
-    # TODO: pre-install ovirt-engine-appliance-3.6-20160420.1.el7.centos.noarch.rpm
     command     => 'engine-setup',
     path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
     logoutput   => true,
-    timeout     => 1850,
+    timeout     => 1800,
     refreshonly => true,
     before      => Service[$engine_service_name],
   }

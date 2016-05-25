@@ -1,4 +1,5 @@
 # == Class: ovirt::node
+
 class ovirt::node (
 
   $node_service_package        = $ovirt::node_service_package,
