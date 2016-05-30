@@ -21,6 +21,7 @@ class ovirt::params {
   $engine_service_enable                = false
   $engine_setup_conf_d                  = '/etc/ovirt-engine-setup.conf.d'
   $engine_answers_file                  = 'puppet:///modules/ovirt/engine_answers.conf'
+  $engine_run_engine_setup              = false
 
   $hosted_engine_service_package        = 'ovirt-hosted-engine-setup'
   $hosted_engine_service_package_ensure = 'installed'
@@ -29,6 +30,7 @@ class ovirt::params {
   $hosted_engine_service_enable         = false
   $hosted_engine_setup_conf_d           = '/etc/otopi.conf.d'
   $hosted_engine_answers_file           = 'puppet:///modules/ovirt/hosted_engine_answers.conf'
-  $hosted_engine_run_engine_setup       = true
+  $hosted_engine_run_deploy             = false
+  $hosted_engine_run_engine_setup       = false
 
 }

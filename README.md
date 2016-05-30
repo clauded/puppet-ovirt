@@ -23,11 +23,11 @@ This module includes a few specific classes:
 
 * node - for installing the oVirt services onto compute nodes
 * engine - for installing the oVirt engine onto your management engine
-* hosted_engine - *does NOT* install the hosted engine, but *does* pre-seed
-                  values for installing the hosted engine.
+* hosted_engine - for installing the oVirt hosted engine
 
-If you use hosted_engine you can run hosted-engine --deploy to finish
-the install.
+You can choose to install manually the hosted-engine and/or the engine
+after the deployment of the packages. You can override the default
+configuration files with your own specific files.
 
 ## Setup
 
@@ -38,44 +38,68 @@ ovirt::node
 
 ovirt::engine
 * installs ovirt-engine
-* runs engine-setup with config options from /etc/ovirt-engine-setup.conf.d/
+* optionally, runs engine-setup with config options from files located
+  in /etc/ovirt-engine-setup.conf.d/
 
 ovirt::hosted_engine
-* installs a sets defaults for the ovirt-hosted-engine
+* installs ovirt-hosted-engine
+* optionally, runs hosted-engine --deploy with config options from files
+  located in /etc/otopi.conf.d/
+* optionally, runs engine-setup with config options from files located
+  in the same directory
 
 ### Setup Requirements **OPTIONAL**
 
-The oVirt packages must be available to your system.
-This module will not install the repos.
+The oVirt packages must be available to your system or
+this module can optionally install the ovirt repos.
 
 ### Beginning with ovirt
 
-Review the ovirt::params class 
+Review the ovirt::params class to see all options available
 
 ## Usage
 
-Put the classes, types, and resources for customizing, configuring, and doing
-the fancy stuff with your module here.
+Deploying ovirt hosted engine with the engine appliance and running
+engine-setup with specific answers file:
+
+  class { 'ovirt':
+    ovirt_repo_manage              => true,
+    hosted_engine_service_enabled  => true,
+    hosted_engine_run_deploy       => true,
+    hosted_engine_run_engine_setup => true,
+    ovirt_engine_appliance_ensure  => 'installed',
+    hosted_engine_answers_file     => "puppet:///modules/${module_name}/ovirt/hosted_engine_answers.conf",
+    engine_answers_file            => "puppet:///modules/${module_name}/ovirt/engine_answers.conf",
+  }
+
+Deploying ovirt engine and running engine-setup with specific answers file:
+
+  class { 'ovirt':
+    engine_service_enabled     => true,
+    engine_run_engine_setup    => true,
+    hosted_engine_answers_file => "puppet:///modules/${module_name}/ovirt/hosted_engine_answers.conf",
+    engine_answers_file        => "puppet:///modules/${module_name}/ovirt/engine_answers.conf",
+  }
+
+Deploying ovirt node:
+
+  class { 'ovirt':
+    node_service_enabled => true,
+  }
 
 ## Reference
 
-Here, list the classes, types, providers, facts, etc contained in your module.
-This section should include all of the under-the-hood workings of your module so
-people know what the module is touching on their system but don't need to mess
-with things. (We are working on automating this section!)
+TODO
 
 ## Limitations
 
-This is targeted at oVirt 3.6 on el7
+This module has been tested with oVirt 3.6 on centos7 running Puppet 3.8
 
 ## Development
 
-Since your module is awesome, other users will want to play with it. Let them
-know what the ground rules for contributing are.
+Log requests ans issues on Github.
 
 ## Release Notes/Contributors/Etc **Optional**
 
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You may also add any additional sections you feel are
-necessary or important to include here. Please use the `## ` header.
+This module is based on https://github.com/jcpunk/puppet-ovirt
 

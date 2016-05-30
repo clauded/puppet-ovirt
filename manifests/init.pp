@@ -22,6 +22,7 @@ class ovirt (
   $engine_service_name                  = $ovirt::engine_service_name,
   $engine_service_ensure                = $ovirt::engine_service_ensure,
   $engine_service_enabled               = $ovirt::engine_service_enabled,
+  $engine_run_engine_setup              = $ovirt::engine_run_engine_setup,
 
   $hosted_engine_setup_conf_d           = $ovirt::hosted_engine_setup_conf_d,
   $hosted_engine_answers_file           = $ovirt::hosted_engine_answers_file,
@@ -30,6 +31,7 @@ class ovirt (
   $hosted_engine_service_name           = $ovirt::hosted_engine_service_name,
   $hosted_engine_service_ensure         = $ovirt::hosted_engine_service_ensure,
   $hosted_engine_service_enabled        = $ovirt::hosted_engine_service_enabled,
+  $hosted_engine_run_deploy             = $ovirt::hosted_engine_run_deploy,
   $hosted_engine_run_engine_setup       = $ovirt::hosted_engine_run_engine_setup,
 
 ) inherits ovirt::params {
