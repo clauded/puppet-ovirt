@@ -52,13 +52,13 @@ class ovirt (
 
   if $engine_service_enabled == true {
     class { 'ovirt::engine':
-      hosted_engine_service_package_require => $hosted_engine_service_package_require,
+      engine_service_package_require => $engine_service_package_require,
     }
   }
 
   if $hosted_engine_service_enabled == true {
     class { 'ovirt::hosted_engine':
-      engine_service_package_require => $engine_service_package_require,
+      hosted_engine_service_package_require => $hosted_engine_service_package_require,
     }
   }
 
