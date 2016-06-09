@@ -95,6 +95,18 @@ class ovirt::hosted_engine (
         File['/etc/sudoers.d/01_dont_requiretty'],
       ]
     }
+
+    # fix ERROR:ovirt_hosted_engine_ha.agent.agent.Agent:Error: '[Errno 24] Too many open files'
+    file_line { 'sanlock_limitnofile':
+      path    => '/usr/lib/systemd/system/ovirt-ha-agent.service',
+      line    => 'LimitNOFILE=65535',
+      require => Package[$hosted_engine_service_package],
+    }
+    file_line { 'sanlock_limitnproc':
+      path    => '/usr/lib/systemd/system/ovirt-ha-agent.service',
+      line    => 'LimitNPROC=65535',
+      require => Package[$hosted_engine_service_package],
+    }
   }
 
   service { $hosted_engine_service_name:
