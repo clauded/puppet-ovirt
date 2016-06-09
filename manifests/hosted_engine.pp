@@ -95,18 +95,6 @@ class ovirt::hosted_engine (
         File['/etc/sudoers.d/01_dont_requiretty'],
       ]
     }
-
-    # fix 'Sanlock lockspace remove failure', 'Too many open files'
-    file_line { 'sanlock_limitnofile':
-      path    => '/usr/lib/systemd/system/sanlock.service',
-      line    => 'LimitNOFILE=65535',
-      require => Exec['hosted_engine_deploy'],
-    }
-    file_line { 'sanlock_limitnproc':
-      path    => '/usr/lib/systemd/system/sanlock.service',
-      line    => 'LimitNPROC=65535',
-      require => Exec['hosted_engine_deploy'],
-    }
   }
 
   service { $hosted_engine_service_name:

@@ -44,18 +44,6 @@ class ovirt::engine (
       before      => Service[$engine_service_name],
       require     => File['engine_answers_file'],
     }
-
-    # fix 'Sanlock lockspace remove failure', 'Too many open files'
-    file_line { 'sanlock_limitnofile':
-      path    => '/usr/lib/systemd/system/sanlock.service',
-      line    => 'LimitNOFILE=65535',
-      require => Exec['engine_setup'],
-    }
-    file_line { 'sanlock_limitnproc':
-      path    => '/usr/lib/systemd/system/sanlock.service',
-      line    => 'LimitNPROC=65535',
-      require => Exec['engine_setup'],
-    }
   }
 
   service { $engine_service_name:
