@@ -2,25 +2,27 @@
 
 class ovirt::hosted_engine (
 
-  $engine_answers_file                  = $ovirt::engine_answers_file,
+  $engine_answers_file                   = $ovirt::engine_answers_file,
 
-  $hosted_engine_setup_conf_d           = $ovirt::hosted_engine_setup_conf_d,
-  $hosted_engine_answers_file           = $ovirt::hosted_engine_answers_file,
-  $hosted_engine_service_package        = $ovirt::hosted_engine_service_package,
-  $hosted_engine_service_package_ensure = $ovirt::hosted_engine_service_package_ensure,
-  $hosted_engine_service_name           = $ovirt::hosted_engine_service_name,
-  $hosted_engine_service_ensure         = $ovirt::hosted_engine_service_ensure,
-  $hosted_engine_service_enabled        = $ovirt::hosted_engine_service_enabled,
-  $hosted_engine_run_deploy             = $ovirt::hosted_engine_run_deploy,
-  $hosted_engine_run_engine_setup       = $ovirt::hosted_engine_run_engine_setup,
-  $ovirt_engine_appliance_package_name  = $ovirt::ovirt_engine_appliance_package_name,
-  $ovirt_engine_appliance_file          = $ovirt::ovirt_engine_appliance_file,
-  $ovirt_engine_appliance_ensure        = $ovirt::ovirt_engine_appliance_ensure,
+  $hosted_engine_setup_conf_d            = $ovirt::hosted_engine_setup_conf_d,
+  $hosted_engine_answers_file            = $ovirt::hosted_engine_answers_file,
+  $hosted_engine_service_package         = $ovirt::hosted_engine_service_package,
+  $hosted_engine_service_package_ensure  = $ovirt::hosted_engine_service_package_ensure,
+  $hosted_engine_service_package_require = undef,
+  $hosted_engine_service_name            = $ovirt::hosted_engine_service_name,
+  $hosted_engine_service_ensure          = $ovirt::hosted_engine_service_ensure,
+  $hosted_engine_service_enabled         = $ovirt::hosted_engine_service_enabled,
+  $hosted_engine_run_deploy              = $ovirt::hosted_engine_run_deploy,
+  $hosted_engine_run_engine_setup        = $ovirt::hosted_engine_run_engine_setup,
+  $ovirt_engine_appliance_package_name   = $ovirt::ovirt_engine_appliance_package_name,
+  $ovirt_engine_appliance_file           = $ovirt::ovirt_engine_appliance_file,
+  $ovirt_engine_appliance_ensure         = $ovirt::ovirt_engine_appliance_ensure,
 
 ) inherits ovirt::node {
 
   package { $hosted_engine_service_package:
-    ensure => $hosted_engine_service_package_ensure,
+    ensure  => $hosted_engine_service_package_ensure,
+    require => $hosted_engine_service_package_require,
   }
 
   if $hosted_engine_run_deploy {
