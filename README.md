@@ -87,6 +87,8 @@ Deploying ovirt node:
     node_service_enabled => true,
   }
 
+Note. When deploying nodes, you might need to add ssh keys on these nodes manually (ovirt engine key).
+
 ## Reference
 
 TODO

@@ -14,6 +14,18 @@ class ovirt::node (
     ensure  => $node_service_package_ensure,
   }
 
+  # fix 'Sanlock lockspace remove failure', 'Too many open files'
+  file_line { 'sanlock_limitnofile':
+    path    => '/usr/lib/systemd/system/sanlock.service',
+    line    => 'LimitNOFILE=65535',
+    require => Package[$node_service_package],
+  }
+  file_line { 'sanlock_limitnproc':
+    path    => '/usr/lib/systemd/system/sanlock.service',
+    line    => 'LimitNPROC=65535',
+    require => Package[$node_service_package],
+  }
+
   service { $node_service_name:
     ensure  => $node_service_ensure,
     enable  => $node_service_enabled,
