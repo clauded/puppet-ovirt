@@ -57,7 +57,7 @@ class ovirt::hosted_engine (
 
     if $ovirt_engine_appliance_ensure == 'installed' {
       exec { 'wget_ovirt_engine_appliance_package':
-        command   => "wget $ovirt_engine_appliance_package_name -O ${ovirt_engine_appliance_file}",
+        command   => "wget ${ovirt_engine_appliance_package_name} -O ${ovirt_engine_appliance_file}",
         path      => '/usr/bin/:/bin/:/sbin:/usr/sbin',
         logoutput => true,
         timeout   => 1800,
