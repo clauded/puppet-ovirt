@@ -2,8 +2,6 @@
 
 class ovirt::node (
 
-  $ovirt_disable_firewalld      = $ovirt::ovirt_disable_firewalld,
-  $ovirt_disable_networkmanager = $ovirt::ovirt_disable_networkmanager,
 
   $node_service_package         = $ovirt::node_service_package,
   $node_service_package_ensure  = $ovirt::node_service_package_ensure,
@@ -13,21 +11,6 @@ class ovirt::node (
   $node_service_enabled         = $ovirt::node_service_enabled,
 
 ) inherits ovirt {
-
-  if $disable_firewalld {
-    service { 'firewalld':
-      ensure => stopped,
-      enable => false,
-      before => Package[$node_service_package],
-    }
-  }
-  if $disable_networkmanager {
-    service { 'NetworkManager':
-      ensure => stopped,
-      enable => false,
-      before => Package[$node_service_package],
-    }
-  }
 
   package { $node_service_package:
     ensure  => $node_service_package_ensure,

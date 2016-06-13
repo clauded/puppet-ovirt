@@ -9,8 +9,8 @@ class ovirt (
   $ovirt_engine_appliance_file           = $ovirt::ovirt_engine_appliance_file,
   $ovirt_engine_appliance_ensure         = $ovirt::ovirt_engine_appliance_ensure,
 
-  $ovirt_disable_firewalld               = $ovirt::ovirt_disable_firewalld,
-  $ovirt_disable_networkmanager          = $ovirt::ovirt_disable_networkmanager,
+  $disable_firewalld                     = $ovirt::ovirt_disable_firewalld,
+  $disable_networkmanager                = $ovirt::ovirt_disable_networkmanager,
 
   $node_service_package                  = $ovirt::node_service_package,
   $node_service_package_ensure           = $ovirt::node_service_package_ensure,
@@ -18,6 +18,9 @@ class ovirt (
   $node_service_name                     = $ovirt::node_service_name,
   $node_service_ensure                   = $ovirt::node_service_ensure,
   $node_service_enabled                  = $ovirt::node_service_enabled,
+
+  $disable_firewalld                     = $ovirt::disable_firewalld,
+  $disable_networkmanager                = $ovirt::disable_networkmanager,
 
   $engine_answers_file                   = $ovirt::engine_answers_file,
   $engine_setup_conf_d                   = $ovirt::engine_setup_conf_d,
@@ -42,24 +45,38 @@ class ovirt (
 
 ) inherits ovirt::params {
 
+  if $disable_firewalld {
+    service { 'firewalld':
+      ensure => stopped,
+      enable => false,
+    }
+  }
+
+  if $disable_networkmanager {
+    service { 'NetworkManager':
+      ensure => stopped,
+      enable => false,
+    }
+  }
+
   if $ovirt_repo_manage {
     class { 'ovirt::repo':
     }
   }
 
-  if $node_service_enabled == true {
+  if $node_service_enabled {
     class { 'ovirt::node':
       node_service_package_require => $node_service_package_require,
     }
   }
 
-  if $engine_service_enabled == true {
+  if $engine_service_enabled {
     class { 'ovirt::engine':
       engine_service_package_require => $engine_service_package_require,
     }
   }
 
-  if $hosted_engine_service_enabled == true {
+  if $hosted_engine_service_enabled {
     class { 'ovirt::hosted_engine':
       hosted_engine_service_package_require => $hosted_engine_service_package_require,
     }
