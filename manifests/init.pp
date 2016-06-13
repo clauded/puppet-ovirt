@@ -56,6 +56,10 @@ class ovirt (
     service { 'NetworkManager':
       ensure => stopped,
       enable => false,
+    }->
+    service { 'network':
+      ensure => running,
+      enable => true,
     }
   }
 
