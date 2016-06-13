@@ -8,6 +8,9 @@ class ovirt::params {
   $ovirt_engine_appliance_file          = '/root/ovirt-engine-appliance-3.6-20160524.1.el7.centos.noarch.rpm'
   $ovirt_engine_appliance_ensure        = 'absent'
 
+  $disable_firewalld                    = false
+  $disable_networkmanager               = true
+
   $node_service_package                 = [ 'vdsm', 'vdsm-cli' ]
   $node_service_package_ensure          = 'installed'
   $node_service_name                    = 'vdsmd'

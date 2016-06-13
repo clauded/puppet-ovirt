@@ -9,6 +9,9 @@ class ovirt (
   $ovirt_engine_appliance_file           = $ovirt::ovirt_engine_appliance_file,
   $ovirt_engine_appliance_ensure         = $ovirt::ovirt_engine_appliance_ensure,
 
+  $ovirt_disable_firewalld               = $ovirt::ovirt_disable_firewalld,
+  $ovirt_disable_networkmanager          = $ovirt::ovirt_disable_networkmanager,
+
   $node_service_package                  = $ovirt::node_service_package,
   $node_service_package_ensure           = $ovirt::node_service_package_ensure,
   $node_service_package_require          = undef,
