@@ -15,8 +15,9 @@ class ovirt::repo (
     timeout => '300',
     before  => Package["$ovirt_repo_package_name"],
   }
-  package { "$ovirt_repo_package_name":
+  package { "ovirt-release36":
     ensure => present,
+    source => $ovirt_repo_package_name
   }
 
 }
