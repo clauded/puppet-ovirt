@@ -13,7 +13,7 @@ class ovirt::repo (
     path    => '/usr/bin:/usr/sbin:/bin:/sbin',
     creates => "/etc/puppet/yum_update.done",
     timeout => '300',
-    before  => Package["$ovirt_repo_package_name"],
+    before  => Package["ovirt-release36"],
   }
   package { "ovirt-release36":
     ensure => present,
