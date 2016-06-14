@@ -2,7 +2,7 @@
 
 class ovirt::node (
 
-  $package_require              = $ovirt::package_require,
+  $package_require              = undef,
 
   $node_service_package         = $ovirt::node_service_package,
   $node_service_package_ensure  = $ovirt::node_service_package_ensure,
