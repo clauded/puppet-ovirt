@@ -2,11 +2,12 @@
 
 class ovirt::engine (
 
+  $package_require                = $ovirt::package_require
+
   $engine_answers_file            = $ovirt::engine_answers_file,
   $engine_setup_conf_d            = $ovirt::engine_setup_conf_d,
   $engine_service_package         = $ovirt::engine_service_package,
   $engine_service_package_ensure  = $ovirt::engine_service_package_ensure,
-  $engine_service_package_require = undef,
   $engine_service_name            = $ovirt::engine_service_name,
   $engine_service_ensure          = $ovirt::engine_service_ensure,
   $engine_service_enabled         = $ovirt::engine_service_enabled,
@@ -16,7 +17,7 @@ class ovirt::engine (
 
   package { $engine_service_package:
     ensure  => $engine_service_package_ensure,
-    require => $engine_service_package_require,
+    require => $package_require,
   }
 
   if $engine_run_engine_setup {

@@ -1,9 +1,12 @@
 # == Class: ovirt::params
 class ovirt::params {
 
-  $ovirt_repo_manage                    = false
+  $ovirt_repo_manage                    = true
   $ovirt_repo_package_name              = 'http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm'
-  $ovirt_version                        = '3.6'
+  $ovirt_repo_version                   = '3.6'
+
+  $package_require                      = undef,
+
   $ovirt_engine_appliance_package_name  = 'http://resources.ovirt.org/pub/ovirt-3.6/rpm/el7/noarch/ovirt-engine-appliance-3.6-20160524.1.el7.centos.noarch.rpm'
   $ovirt_engine_appliance_file          = '/root/ovirt-engine-appliance-3.6-20160524.1.el7.centos.noarch.rpm'
   $ovirt_engine_appliance_ensure        = 'absent'

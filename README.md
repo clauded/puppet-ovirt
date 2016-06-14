@@ -95,7 +95,7 @@ TODO
 
 ## Limitations
 
-This module has been tested with oVirt 3.6 on centos7 running Puppet 3.8
+This module has been tested with oVirt 3.6/4.0 on Centos7 running Puppet 3.8
 
 ## Development
 

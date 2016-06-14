@@ -4,11 +4,12 @@ class ovirt::hosted_engine (
 
   $engine_answers_file                   = $ovirt::engine_answers_file,
 
+  $package_require                       = $ovirt::package_require
+
   $hosted_engine_setup_conf_d            = $ovirt::hosted_engine_setup_conf_d,
   $hosted_engine_answers_file            = $ovirt::hosted_engine_answers_file,
   $hosted_engine_service_package         = $ovirt::hosted_engine_service_package,
   $hosted_engine_service_package_ensure  = $ovirt::hosted_engine_service_package_ensure,
-  $hosted_engine_service_package_require = undef,
   $hosted_engine_service_name            = $ovirt::hosted_engine_service_name,
   $hosted_engine_service_ensure          = $ovirt::hosted_engine_service_ensure,
   $hosted_engine_service_enabled         = $ovirt::hosted_engine_service_enabled,
@@ -22,7 +23,7 @@ class ovirt::hosted_engine (
 
   package { $hosted_engine_service_package:
     ensure  => $hosted_engine_service_package_ensure,
-    require => $hosted_engine_service_package_require,
+    require => $package_require,
   }
 
   if $hosted_engine_run_deploy {
@@ -78,7 +79,8 @@ class ovirt::hosted_engine (
     }
 
     # don't require tty for hosted_engine_deploy to work
-    file { '/etc/sudoers.d/01_dont_requiretty':
+    file { 'dont_requiretty':
+      path    => '/etc/sudoers.d/01_dont_requiretty',
       owner   => 'root',
       group   => 'root',
       mode    => '0440',
@@ -94,11 +96,11 @@ class ovirt::hosted_engine (
       before      => Service[$hosted_engine_service_name],
       require     => [
         File['hosted_engine_answers_file'],
-        File['/etc/sudoers.d/01_dont_requiretty'],
+        File['dont_requiretty'],
       ]
     }
 
-    # fix ERROR:ovirt_hosted_engine_ha.agent.agent.Agent:Error: '[Errno 24] Too many open files'
+    # v4 fix ERROR:ovirt_hosted_engine_ha.agent.agent.Agent:Error: '[Errno 24] Too many open files'
     file_line { 'ovirt-ha-agent_limitnofile':
       path    => '/usr/lib/systemd/system/ovirt-ha-agent.service',
       line    => 'LimitNOFILE=65535',

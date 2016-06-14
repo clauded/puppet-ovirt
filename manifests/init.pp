@@ -4,7 +4,10 @@ class ovirt (
 
   $ovirt_repo_manage                     = $ovirt::ovirt_repo_manage,
   $ovirt_repo_package_name               = $ovirt::ovirt_repo_package_name,
-  $ovirt_version                         = $ovirt::ovirt_version,
+  $ovirt_repo_version                    = $ovirt::ovirt_repo_version,
+
+  $package_require                       = $ovirt::package_require
+
   $ovirt_engine_appliance_package_name   = $ovirt::ovirt_engine_appliance_package_name,
   $ovirt_engine_appliance_file           = $ovirt::ovirt_engine_appliance_file,
   $ovirt_engine_appliance_ensure         = $ovirt::ovirt_engine_appliance_ensure,
@@ -14,7 +17,6 @@ class ovirt (
 
   $node_service_package                  = $ovirt::node_service_package,
   $node_service_package_ensure           = $ovirt::node_service_package_ensure,
-  $node_service_package_require          = undef,
   $node_service_name                     = $ovirt::node_service_name,
   $node_service_ensure                   = $ovirt::node_service_ensure,
   $node_service_enabled                  = $ovirt::node_service_enabled,
@@ -26,7 +28,6 @@ class ovirt (
   $engine_setup_conf_d                   = $ovirt::engine_setup_conf_d,
   $engine_service_package                = $ovirt::engine_service_package,
   $engine_service_package_ensure         = $ovirt::engine_service_package_ensure,
-  $engine_service_package_require        = undef,
   $engine_service_name                   = $ovirt::engine_service_name,
   $engine_service_ensure                 = $ovirt::engine_service_ensure,
   $engine_service_enabled                = $ovirt::engine_service_enabled,
@@ -36,7 +37,6 @@ class ovirt (
   $hosted_engine_answers_file            = $ovirt::hosted_engine_answers_file,
   $hosted_engine_service_package         = $ovirt::hosted_engine_service_package,
   $hosted_engine_service_package_ensure  = $ovirt::hosted_engine_service_package_ensure,
-  $hosted_engine_service_package_require = undef,
   $hosted_engine_service_name            = $ovirt::hosted_engine_service_name,
   $hosted_engine_service_ensure          = $ovirt::hosted_engine_service_ensure,
   $hosted_engine_service_enabled         = $ovirt::hosted_engine_service_enabled,
@@ -49,6 +49,7 @@ class ovirt (
     service { 'firewalld':
       ensure => stopped,
       enable => false,
+      before => Service[$node_service_name],
     }
   }
 
@@ -60,29 +61,31 @@ class ovirt (
     service { 'network':
       ensure => running,
       enable => true,
+      before => Service[$node_service_name],
     }
   }
 
   if $ovirt_repo_manage {
+    $package_require = "Exec['yum_repo_ovirt']"
     class { 'ovirt::repo':
     }
   }
 
   if $node_service_enabled {
     class { 'ovirt::node':
-      node_service_package_require => $node_service_package_require,
+      package_require => $package_require,
     }
   }
 
   if $engine_service_enabled {
     class { 'ovirt::engine':
-      engine_service_package_require => $engine_service_package_require,
+      package_require => $package_require,
     }
   }
 
   if $hosted_engine_service_enabled {
     class { 'ovirt::hosted_engine':
-      hosted_engine_service_package_require => $hosted_engine_service_package_require,
+      package_require => [ Service[$node_service_name], $package_require ],
     }
   }
 
