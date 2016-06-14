@@ -8,11 +8,15 @@ class ovirt::repo (
 
 ) inherits ovirt {
 
-  exec { 'yum_repo_ovirt':
-    command => "yum -y update && yum -y install ${ovirt_repo_package_name}",
+  exec { 'yum_update':
+    command => "yum -y update && touch /etc/puppet/yum_update.done",
     path    => '/usr/bin:/usr/sbin:/bin:/sbin',
-    creates => "/etc/yum.repos.d/ovirt-${ovirt_version}.repo",
-    timeout => '600',
+    creates => "/etc/puppet/yum_update.done",
+    timeout => '300',
+    before  => Package["$ovirt_repo_package_name"],
+  }
+  package { "$ovirt_repo_package_name":
+    ensure => present,
   }
 
 }

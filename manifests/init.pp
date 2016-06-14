@@ -64,7 +64,7 @@ class ovirt (
   }
 
   if $ovirt_repo_manage {
-    $package_require = "Exec['yum_repo_ovirt']"
+    $package_require = "Package[${ovirt_repo_package_name}]"
     class { 'ovirt::repo':
     }
   } else {
