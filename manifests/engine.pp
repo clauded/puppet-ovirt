@@ -2,7 +2,7 @@
 
 class ovirt::engine (
 
-  $package_require                = $ovirt::package_require
+  $package_require                = $ovirt::package_require,
 
   $engine_answers_file            = $ovirt::engine_answers_file,
   $engine_setup_conf_d            = $ovirt::engine_setup_conf_d,
