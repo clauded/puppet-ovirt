@@ -45,7 +45,7 @@ class ovirt::engine (
       timeout   => 1800,
       creates   => '/etc/puppet/engine_setup.done',
       before    => [
-        Service[$node_service_name]
+        Service[$node_service_name],
         Service[$engine_service_name],
       ],
       require   => File['engine_answers_file'],

@@ -90,7 +90,7 @@ class ovirt::hosted_engine (
       timeout   => 1800,
       creates   => '/etc/puppet/hosted_engine_deploy.done',
       before    => [
-        Service[$node_service_name]
+        Service[$node_service_name],
         Service[$engine_service_name],
       ],
       require   => [
