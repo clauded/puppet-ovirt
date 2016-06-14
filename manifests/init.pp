@@ -47,7 +47,6 @@ class ovirt (
     service { 'firewalld':
       ensure => stopped,
       enable => false,
-      before => Service[$node_service_name],
     }
   }
 
@@ -59,7 +58,6 @@ class ovirt (
     service { 'network':
       ensure => running,
       enable => true,
-      before => Service[$node_service_name],
     }
   }
 
