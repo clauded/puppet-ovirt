@@ -101,7 +101,7 @@ class ovirt::hosted_engine (
 
     # v4 fix ERROR:ovirt_hosted_engine_ha.agent.agent.Agent:Error: '[Errno 24] Too many open files'
     exec { 'fix_ovirt_ha_agent_limit':
-      command => 'sed -i "/ExecStop=*/a LimitNPROC=65535\nLimitNOFILE=65535" /usr/lib/systemd/system/ovirt-ha-agent.service',
+      command => 'sed -i "/Restart=*/a LimitNPROC=65535\nLimitNOFILE=65535" /usr/lib/systemd/system/ovirt-ha-agent.service',
       path    => [ '/bin', '/usr/bin' ],
       unless  => 'grep -c LimitNPROC /usr/lib/systemd/system/ovirt-ha-agent.service',
       before  => Service[$hosted_engine_service_name],
