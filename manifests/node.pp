@@ -17,7 +17,7 @@ class ovirt::node (
     require => $package_require,
   }
 
-  # run 'vdsm-tool configure --force' before starting service
+  # run 'vdsm-tool configure --force' to fix service startup
   #exec { 'vdsm_tool_configure':
   #  command => 'vdsm-tool configure --force && touch /etc/puppet/vdsm_tool_configure.done',
   #  path    => [ '/bin', '/usr/bin' ],
@@ -26,9 +26,9 @@ class ovirt::node (
   #  require => Package[$node_service_package],
   #}
 
-  # exclude local disks from multipathing
+  # exclude local disk sda from multipathing
   exec { 'multipath_blacklist':
-    command => 'printf "blacklist {\n\tdevnode \"^sda[0-9]\"\n}\n" >> /etc/multipath.conf',
+    command => 'printf "blacklist {\n\tdevnode \"^sda\"\n}\n" >> /etc/multipath.conf && systemctl restart multipathd.service',
     path    => [ '/bin', '/usr/bin' ],
     unless  => 'grep -c blacklist /etc/multipath.conf',
     before  => Service[$node_service_name],
