@@ -64,7 +64,7 @@ class ovirt (
   }
 
   if $ovirt_repo_manage {
-    $package_require = "Package[${ovirt_repo_package_name}]"
+    $package_require = "Package[ovirt-release${ovirt_repo_version}]"
     class { 'ovirt::repo':
     }
   } else {
