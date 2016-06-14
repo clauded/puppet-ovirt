@@ -91,7 +91,7 @@ class ovirt::hosted_engine (
       creates   => '/etc/puppet/hosted_engine_deploy.done',
       before    => [
         Service[$node_service_name],
-        Service[$engine_service_name],
+        Service[$hosted_engine_service_name],
       ],
       require   => [
         File['hosted_engine_answers_file'],
