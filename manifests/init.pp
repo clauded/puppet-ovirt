@@ -6,8 +6,6 @@ class ovirt (
   $ovirt_repo_package_name               = $ovirt::ovirt_repo_package_name,
   $ovirt_repo_version                    = $ovirt::ovirt_repo_version,
 
-  $package_require                       = $ovirt::package_require,
-
   $ovirt_engine_appliance_package_name   = $ovirt::ovirt_engine_appliance_package_name,
   $ovirt_engine_appliance_file           = $ovirt::ovirt_engine_appliance_file,
   $ovirt_engine_appliance_ensure         = $ovirt::ovirt_engine_appliance_ensure,
@@ -69,6 +67,8 @@ class ovirt (
     $package_require = "Exec['yum_repo_ovirt']"
     class { 'ovirt::repo':
     }
+  } else {
+    $package_require = undef
   }
 
   if $node_service_enabled {
