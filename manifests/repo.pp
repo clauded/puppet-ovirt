@@ -16,9 +16,9 @@ class ovirt::repo (
     before  => Package["ovirt-release${ovirt_repo_version}"],
   }
   package { "ovirt-release${ovirt_repo_version}":
-    ensure => present,
+    ensure   => present,
     provider => 'rpm',
-    source => $ovirt_repo_url,
+    source   => $ovirt_repo_url,
   }
 
 }

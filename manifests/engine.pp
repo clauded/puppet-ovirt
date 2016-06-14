@@ -2,16 +2,16 @@
 
 class ovirt::engine (
 
-  $package_require                = undef,
+  $package_require               = undef,
 
-  $engine_answers_file            = $ovirt::engine_answers_file,
-  $engine_setup_conf_d            = $ovirt::engine_setup_conf_d,
-  $engine_service_package         = $ovirt::engine_service_package,
-  $engine_service_package_ensure  = $ovirt::engine_service_package_ensure,
-  $engine_service_name            = $ovirt::engine_service_name,
-  $engine_service_ensure          = $ovirt::engine_service_ensure,
-  $engine_service_enabled         = $ovirt::engine_service_enabled,
-  $engine_run_engine_setup        = $ovirt::engine_run_engine_setup,
+  $engine_answers_file           = $ovirt::engine_answers_file,
+  $engine_setup_conf_d           = $ovirt::engine_setup_conf_d,
+  $engine_service_package        = $ovirt::engine_service_package,
+  $engine_service_package_ensure = $ovirt::engine_service_package_ensure,
+  $engine_service_name           = $ovirt::engine_service_name,
+  $engine_service_ensure         = $ovirt::engine_service_ensure,
+  $engine_service_enabled        = $ovirt::engine_service_enabled,
+  $engine_run_engine_setup       = $ovirt::engine_run_engine_setup,
 
 ) inherits ovirt {
 
@@ -39,13 +39,16 @@ class ovirt::engine (
     }
 
     exec { 'engine_setup':
-      command     => 'engine-setup && touch /etc/puppet/engine_setup.done',
-      path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
-      logoutput   => true,
-      timeout     => 1800,
-      creates     => '/etc/puppet/engine_setup.done',
-      before      => Service[$engine_service_name],
-      require     => File['engine_answers_file'],
+      command   => 'engine-setup && touch /etc/puppet/engine_setup.done',
+      path      => '/usr/bin/:/bin/:/sbin:/usr/sbin',
+      logoutput => true,
+      timeout   => 1800,
+      creates   => '/etc/puppet/engine_setup.done',
+      before    => [
+        Service[$node_service_name]
+        Service[$engine_service_name],
+      ],
+      require   => File['engine_answers_file'],
     }
   }
 

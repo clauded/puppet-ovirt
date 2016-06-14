@@ -34,7 +34,6 @@ class ovirt::hosted_engine (
       mode    => '0750',
       require => Package[$hosted_engine_service_package],
     }
-
     file { 'hosted_engine_answers_file':
       path    => "${hosted_engine_setup_conf_d}/hosted_engine_answers.conf",
       owner   => 'root',
@@ -63,18 +62,15 @@ class ovirt::hosted_engine (
         logoutput => true,
         timeout   => 1800,
         creates   => $ovirt_engine_appliance_file,
+        before    => Exec['install_ovirt_engine_appliance_package'],
       }
-
       exec { 'install_ovirt_engine_appliance_package':
         command   => "rpm -i ${ovirt_engine_appliance_file} && touch /etc/puppet/install_ovirt_engine_appliance_package.done",
         path      => '/usr/bin/:/bin/:/sbin:/usr/sbin',
         logoutput => true,
         creates   => '/etc/puppet/install_ovirt_engine_appliance_package.done',
         before    => Exec['hosted_engine_deploy'],
-        require   => [
-          Package[$hosted_engine_service_package],
-          Exec['wget_ovirt_engine_appliance_package'],
-        ],
+        require   => Package[$hosted_engine_service_package],
       }
     }
 
@@ -88,13 +84,16 @@ class ovirt::hosted_engine (
     }
 
     exec { 'hosted_engine_deploy':
-      command     => 'hosted-engine --deploy && touch /etc/puppet/hosted_engine_deploy.done',
-      path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
-      logoutput   => true,
-      timeout     => 1800,
-      creates     => '/etc/puppet/hosted_engine_deploy.done',
-      before      => Service[$hosted_engine_service_name],
-      require     => [
+      command   => 'hosted-engine --deploy && touch /etc/puppet/hosted_engine_deploy.done',
+      path      => '/usr/bin/:/bin/:/sbin:/usr/sbin',
+      logoutput => true,
+      timeout   => 1800,
+      creates   => '/etc/puppet/hosted_engine_deploy.done',
+      before    => [
+        Service[$node_service_name]
+        Service[$engine_service_name],
+      ],
+      require   => [
         File['hosted_engine_answers_file'],
         File['dont_requiretty'],
       ]
