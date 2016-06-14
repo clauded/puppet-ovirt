@@ -17,15 +17,30 @@ class ovirt::node (
     require => $package_require,
   }
 
-  # v4 fix 'Sanlock lockspace remove failure', 'Too many open files'
-  file_line { 'sanlock_limitnofile':
-    path    => '/usr/lib/systemd/system/sanlock.service',
-    line    => 'LimitNOFILE=65535',
+  # run 'vdsm-tool configure --force' before starting service
+  #exec { 'vdsm_tool_configure':
+  #  command => 'vdsm-tool configure --force && touch /etc/puppet/vdsm_tool_configure.done',
+  #  path    => [ '/bin', '/usr/bin' ],
+  #  creates => '/etc/puppet/vdsm_tool_configure.done',
+  #  before  => Service[$node_service_name],
+  #  require => Package[$node_service_package],
+  #}
+
+  # exclude local disks from multipathing
+  exec { 'multipath_blacklist':
+    command => 'printf "blacklist {\n\tdevnode \"^sda[0-9]\"\n}\n" >> /etc/multipath.conf',
+    path    => [ '/bin', '/usr/bin' ],
+    unless  => 'grep -c blacklist /etc/multipath.conf',
+    before  => Service[$node_service_name],
     require => Package[$node_service_package],
   }
-  file_line { 'sanlock_limitnproc':
-    path    => '/usr/lib/systemd/system/sanlock.service',
-    line    => 'LimitNPROC=65535',
+
+  # v4 fix 'Sanlock lockspace remove failure', 'Too many open files'
+  exec { 'fix_ovirt_sanlock_limit':
+    command => 'sed -i "/ExecStop=*/a LimitNPROC=65535\nLimitNOFILE=65535" /usr/lib/systemd/system/sanlock.service',
+    path    => [ '/bin', '/usr/bin' ],
+    unless  => 'grep -c LimitNPROC /usr/lib/systemd/system/sanlock.service',
+    before  => Service[$node_service_name],
     require => Package[$node_service_package],
   }
 
