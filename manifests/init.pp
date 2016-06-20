@@ -6,6 +6,8 @@ class ovirt (
   $ovirt_repo_url                       = $ovirt::ovirt_repo_url,
   $ovirt_repo_version                   = $ovirt::ovirt_repo_version,
 
+  $package_require                      = undef, # when not managing repo
+
   $ovirt_engine_appliance_package_name  = $ovirt::ovirt_engine_appliance_package_name,
   $ovirt_engine_appliance_file          = $ovirt::ovirt_engine_appliance_file,
   $ovirt_engine_appliance_ensure        = $ovirt::ovirt_engine_appliance_ensure,
@@ -62,28 +64,28 @@ class ovirt (
   }
 
   if $ovirt_repo_manage {
-    $package_require = "Package[ovirt-release${ovirt_repo_version}]"
+    $package_require_supp = "Package[ovirt-release${ovirt_repo_version}]"
     class { 'ovirt::repo':
     }
   } else {
-    $package_require = undef
+    $package_require_supp = $package_require
   }
 
   if $node_service_enabled {
     class { 'ovirt::node':
-      package_require => $package_require,
+      package_require => $package_require_supp,
     }
   }
 
   if $engine_service_enabled {
     class { 'ovirt::engine':
-      package_require => $package_require,
+      package_require => $package_require_supp,
     }
   }
 
   if $hosted_engine_service_enabled {
     class { 'ovirt::hosted_engine':
-      package_require => [ Package[$node_service_package], $package_require ],
+      package_require => [ Package[$node_service_package], $package_require_supp ],
     }
   }
 
