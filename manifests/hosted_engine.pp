@@ -62,7 +62,6 @@ class ovirt::hosted_engine (
         logoutput => true,
         timeout   => 1800,
         creates   => $ovirt_engine_appliance_file,
-        before    => Exec['install_ovirt_engine_appliance_package'],
       }
       exec { 'install_ovirt_engine_appliance_package':
         command   => "rpm -i --nodeps ${ovirt_engine_appliance_file} && touch /etc/puppet/install_ovirt_engine_appliance_package.done",
@@ -72,9 +71,10 @@ class ovirt::hosted_engine (
         creates   => '/etc/puppet/install_ovirt_engine_appliance_package.done',
         before    => Exec['hosted_engine_deploy'],
         require   => [
-          Package[$hosted_engine_service_package],
           Service[$node_service_name],
-        ]
+          Package[$hosted_engine_service_package],
+          Exec['wget_ovirt_engine_appliance_package'],
+        ],
       }
     }
 
@@ -94,10 +94,7 @@ class ovirt::hosted_engine (
       timeout   => 1800,
       creates   => '/etc/puppet/hosted_engine_deploy.done',
       notify    => Exec['remove_ovirt_engine_appliance_package'],
-      before    => [
-        Service[$node_service_name],
-        Service[$hosted_engine_service_name],
-      ],
+      before    => Service[$hosted_engine_service_name],
       require   => [
         File['hosted_engine_answers_file'],
         File['dont_requiretty'],
