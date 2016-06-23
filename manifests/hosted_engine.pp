@@ -56,16 +56,17 @@ class ovirt::hosted_engine (
     }
 
     if $ovirt_engine_appliance_ensure == 'installed' {
-      exec { 'wget_ovirt_engine_appliance_package':
-        command   => "wget ${ovirt_engine_appliance_package_name} -O ${ovirt_engine_appliance_file}",
-        path      => '/usr/bin/:/bin/:/sbin:/usr/sbin',
-        logoutput => true,
-        timeout   => 1800,
-        creates   => $ovirt_engine_appliance_file,
-        before    => Exec['install_ovirt_engine_appliance_package'],
-      }
+      #exec { 'wget_ovirt_engine_appliance_package':
+      #  command   => "wget -q ${ovirt_engine_appliance_package_name} -O ${ovirt_engine_appliance_file}",
+      #  path      => '/usr/bin/:/bin/:/sbin:/usr/sbin',
+      #  logoutput => true,
+      #  timeout   => 1800,
+      #  creates   => $ovirt_engine_appliance_file,
+      #  before    => Exec['install_ovirt_engine_appliance_package'],
+      #}
       exec { 'install_ovirt_engine_appliance_package':
-        command   => "rpm -i ${ovirt_engine_appliance_file} && touch /etc/puppet/install_ovirt_engine_appliance_package.done",
+        #command   => "rpm -i --nodeps ${ovirt_engine_appliance_file} && touch /etc/puppet/install_ovirt_engine_appliance_package.done",
+        command   => "yum -y install ovirt-engine-appliance && touch /etc/puppet/install_ovirt_engine_appliance_package.done",
         path      => '/usr/bin/:/bin/:/sbin:/usr/sbin',
         logoutput => true,
         creates   => '/etc/puppet/install_ovirt_engine_appliance_package.done',
@@ -89,6 +90,7 @@ class ovirt::hosted_engine (
       logoutput => true,
       timeout   => 1800,
       creates   => '/etc/puppet/hosted_engine_deploy.done',
+      notify    => Exec['remove_ovirt_engine_appliance_package'],
       before    => [
         Service[$node_service_name],
         Service[$hosted_engine_service_name],
@@ -97,6 +99,13 @@ class ovirt::hosted_engine (
         File['hosted_engine_answers_file'],
         File['dont_requiretty'],
       ]
+    }
+    # once deploy is done, this package should be removed
+    exec { 'remove_ovirt_engine_appliance_package':
+      command     => "yum -y remove ovirt-engine-appliance",
+      path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
+      logoutput   => true,
+      refreshonly => true,
     }
 
     # v4 fix ERROR:ovirt_hosted_engine_ha.agent.agent.Agent:Error: '[Errno 24] Too many open files'
