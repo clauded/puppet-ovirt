@@ -71,7 +71,10 @@ class ovirt::hosted_engine (
         logoutput => true,
         creates   => '/etc/puppet/install_ovirt_engine_appliance_package.done',
         before    => Exec['hosted_engine_deploy'],
-        require   => Package[$hosted_engine_service_package],
+        require   => [
+          Package[$hosted_engine_service_package],
+          Service[$node_service_name],
+        ]
       }
     }
 

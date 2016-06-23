@@ -85,7 +85,7 @@ class ovirt (
 
   if $hosted_engine_service_enabled {
     class { 'ovirt::hosted_engine':
-      package_require => [ Service[$node_service_name], $package_require_supp ],
+      package_require => [ Package[$node_service_package], $package_require_supp ],
     }
   }
 
