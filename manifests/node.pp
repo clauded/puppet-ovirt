@@ -24,7 +24,7 @@ class ovirt::node (
     creates => '/etc/puppet/vdsm_tool_configure.done',
     before  => [
       Exec['multipath_blacklist_local_disks'],
-      Service[$node_service_name]
+      Service[$node_service_name],
     ],
     require => Package[$node_service_package],
   }

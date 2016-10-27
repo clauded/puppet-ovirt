@@ -15,8 +15,8 @@ class ovirt::hosted_engine (
   $hosted_engine_service_enabled         = $ovirt::hosted_engine_service_enabled,
   $hosted_engine_run_deploy              = $ovirt::hosted_engine_run_deploy,
   $hosted_engine_run_engine_setup        = $ovirt::hosted_engine_run_engine_setup,
-  $ovirt_engine_appliance_package_name   = $ovirt::ovirt_engine_appliance_package_name,
-  $ovirt_engine_appliance_file           = $ovirt::ovirt_engine_appliance_file,
+  #$ovirt_engine_appliance_package_name   = $ovirt::ovirt_engine_appliance_package_name,
+  #$ovirt_engine_appliance_file           = $ovirt::ovirt_engine_appliance_file,
   $ovirt_engine_appliance_ensure         = $ovirt::ovirt_engine_appliance_ensure,
 
 ) inherits ovirt::node {
@@ -68,7 +68,6 @@ class ovirt::hosted_engine (
         #command   => "rpm -i ${ovirt_engine_appliance_file} && touch /etc/puppet/install_ovirt_engine_appliance_package.done",
         command   => "yum -y install ovirt-engine-appliance && touch /etc/puppet/install_ovirt_engine_appliance_package.done",
         path      => '/usr/bin/:/bin/:/sbin:/usr/sbin',
-        logoutput => true,
         creates   => '/etc/puppet/install_ovirt_engine_appliance_package.done',
         before    => Exec['hosted_engine_deploy'],
         require   => Package[$hosted_engine_service_package],
@@ -95,14 +94,13 @@ class ovirt::hosted_engine (
       require   => [
         File['hosted_engine_answers_file'],
         File['dont_requiretty'],
-        Service[$node_service_name],
+        #Service[$node_service_name],
       ]
     }
     # once deploy is done, this package should be removed
     exec { 'remove_ovirt_engine_appliance_package':
       command     => "yum -y remove ovirt-engine-appliance",
       path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
-      logoutput   => true,
       refreshonly => true,
     }
 

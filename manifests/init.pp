@@ -8,8 +8,8 @@ class ovirt (
 
   $package_require                      = undef, # when not managing repo
 
-  $ovirt_engine_appliance_package_name  = $ovirt::ovirt_engine_appliance_package_name,
-  $ovirt_engine_appliance_file          = $ovirt::ovirt_engine_appliance_file,
+  #$ovirt_engine_appliance_package_name  = $ovirt::ovirt_engine_appliance_package_name,
+  #$ovirt_engine_appliance_file          = $ovirt::ovirt_engine_appliance_file,
   $ovirt_engine_appliance_ensure        = $ovirt::ovirt_engine_appliance_ensure,
 
   $disable_firewalld                    = $ovirt::ovirt_disable_firewalld,
