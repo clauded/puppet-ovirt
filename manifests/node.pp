@@ -18,8 +18,13 @@ class ovirt::node (
   }
 
   # run 'vdsm-tool configure --force' before service startup
+  # terrible hack to avoid invalid cert. date (https://bugzilla.redhat.com/show_bug.cgi?id=1291161)
   exec { 'vdsm_tool_configure':
-    command => 'vdsm-tool configure --force && touch /etc/puppet/vdsm_tool_configure.done',
+    command => '
+      date --set "$(date +%Y-%m-%d -d ''yesterday'') $(date +%H:%M:%S)" && \
+      vdsm-tool configure --force && \
+      date --set "$(date +%Y-%m-%d -d ''tomorrow'') $(date +%H:%M:%S)" && \
+      touch /etc/puppet/vdsm_tool_configure.done',
     path    => [ '/bin', '/usr/bin' ],
     creates => '/etc/puppet/vdsm_tool_configure.done',
     before  => [
