@@ -60,4 +60,18 @@ class ovirt::node (
     require => Package[$node_service_package],
   }
 
+  # fix lvmetad is running but disabled http://lists.ovirt.org/pipermail/users/2016-June/040420.html
+  exec { 'disable_lvmetad':
+    command =>
+      'sed -i "s/use_lvmetad = 1/use_lvmetad = 0/" /etc/lvm/lvm.conf',
+    path    => [ '/bin', '/usr/bin' ],
+    unless  => 'grep -c "use_lvmetad = 0" /etc/lvm/lvm.conf',
+    require => Package[$node_service_package],
+  }
+  service { [ 'lvm2-lvmetad.service', 'lvm2-lvmetad.socket', ]:
+    ensure  => 'stopped',
+    enable  => false,
+    require => Package[$node_service_package],
+  }
+
 }
