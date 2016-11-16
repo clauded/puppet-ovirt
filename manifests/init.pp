@@ -45,17 +45,26 @@ class ovirt (
 ) inherits ovirt::params {
 
   if $disable_firewalld {
-    service { 'ovirt-firewalld':
-      name   => 'firewalld',
+    service { 'firewalld':
       ensure => stopped,
       enable => false,
     }
+  } else {
+    service { 'firewalld':
+      ensure => running,
+      enable => true,
+    }
   }
+
   if $disable_iptables {
-    service { 'ovirt-iptables':
-      name   => 'iptables',
+    service { 'iptables':
       ensure => stopped,
       enable => false,
+    }
+  } else {
+    service { 'iptables':
+      ensure => running,
+      enable => true,
     }
   }
 
