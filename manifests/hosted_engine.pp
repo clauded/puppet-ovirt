@@ -42,8 +42,6 @@ class ovirt::hosted_engine (
 
   if $hosted_engine_run_engine_setup {
 
-    $notify = "Exec['remove_ovirt_engine_appliance_package']"
-
     file { 'engine_answers_file':
       path    => "${hosted_engine_setup_conf_d}/engine_answers.conf",
       owner   => 'root',
@@ -60,13 +58,6 @@ class ovirt::hosted_engine (
       creates   => '/etc/puppet/install_ovirt_engine_appliance_package.done',
       before    => Exec['hosted_engine_deploy'],
       require   => Package[$hosted_engine_service_package],
-    }
-
-    # once deploy is done, this package should be removed if present
-    exec { 'remove_ovirt_engine_appliance_package':
-      command     => "yum -y remove ovirt-engine-appliance",
-      path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
-      refreshonly => true,
     }
 
   }
@@ -86,13 +77,20 @@ class ovirt::hosted_engine (
     logoutput => true,
     timeout   => 1800,
     creates   => '/etc/puppet/hosted_engine_deploy.done',
-    notify    => $notify,
+    notify    => Exec['remove_ovirt_engine_appliance_package'],
     before    => Service[$hosted_engine_service_name],
     require   => [
       File['hosted_engine_answers_file'],
       File['dont_requiretty'],
       Service[$node_service_name],
     ]
+  }
+
+  # once deploy is done, this package should be removed if present
+  exec { 'remove_ovirt_engine_appliance_package':
+    command     => "yum -y remove ovirt-engine-appliance",
+    path        => '/usr/bin/:/bin/:/sbin:/usr/sbin',
+    refreshonly => true,
   }
 
   # v4 fix ERROR:ovirt_hosted_engine_ha.agent.agent.Agent:Error: '[Errno 24] Too many open files' on Centos 7 with v4+
