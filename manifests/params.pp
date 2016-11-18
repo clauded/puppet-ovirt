@@ -2,14 +2,14 @@
 class ovirt::params {
 
   $ovirt_repo_manage                    = true
-  $ovirt_repo_url                       = 'http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release36.rpm'
-  $ovirt_repo_version                   = '36'
+  $ovirt_repo_url                       = 'http://plain.resources.ovirt.org/pub/yum-repo/ovirt-release40.rpm'
+  $ovirt_repo_version                   = '40'
 
   $ovirt_engine_appliance_ensure        = 'absent'
 
   $disable_firewalld                    = false
   $disable_iptables                     = false
-  $disable_networkmanager               = true
+  $disable_networkmanager               = false
 
   $node_service_package                 = [ 'vdsm', 'vdsm-cli' ]
   $node_service_package_ensure          = 'installed'
@@ -21,7 +21,7 @@ class ovirt::params {
   $engine_service_package_ensure        = 'installed'
   $engine_service_name                  = 'ovirt-engine'
   $engine_service_ensure                = 'running'
-  $engine_service_enable                = false
+  $engine_service_enabled               = true
   $engine_setup_conf_d                  = '/etc/ovirt-engine-setup.conf.d'
   $engine_answers_file                  = 'puppet:///modules/ovirt/engine_answers.conf'
   $engine_run_engine_setup              = false
@@ -30,10 +30,9 @@ class ovirt::params {
   $hosted_engine_service_package_ensure = 'installed'
   $hosted_engine_service_name           = [ 'ovirt-ha-agent.service', 'ovirt-ha-broker.service' ]
   $hosted_engine_service_ensure         = 'running'
-  $hosted_engine_service_enable         = false
+  $hosted_engine_service_enabled        = true
   $hosted_engine_setup_conf_d           = '/etc/otopi.conf.d'
   $hosted_engine_answers_file           = 'puppet:///modules/ovirt/hosted_engine_answers.conf'
-  $hosted_engine_run_deploy             = false
   $hosted_engine_run_engine_setup       = false
 
 }

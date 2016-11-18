@@ -10,9 +10,6 @@ class ovirt (
 
   $ovirt_engine_appliance_ensure        = $ovirt::ovirt_engine_appliance_ensure,
 
-  $disable_firewalld                    = $ovirt::ovirt_disable_firewalld,
-  $disable_networkmanager               = $ovirt::ovirt_disable_networkmanager,
-
   $node_service_package                 = $ovirt::node_service_package,
   $node_service_package_ensure          = $ovirt::node_service_package_ensure,
   $node_service_name                    = $ovirt::node_service_name,
@@ -49,25 +46,13 @@ class ovirt (
       ensure => stopped,
       enable => false,
     }
-  } else {
-    service { 'firewalld':
-      ensure => running,
-      enable => true,
-    }
   }
-
   if $disable_iptables {
     service { 'iptables':
       ensure => stopped,
       enable => false,
     }
-  } else {
-    service { 'iptables':
-      ensure => running,
-      enable => true,
-    }
   }
-
   if $disable_networkmanager {
     service { 'NetworkManager':
       ensure => stopped,

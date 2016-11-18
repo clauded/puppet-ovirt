@@ -18,7 +18,7 @@ class ovirt::node (
   }
 
   # run 'vdsm-tool configure --force' before service startup
-  # terrible hack to avoid invalid cert. date (https://bugzilla.redhat.com/show_bug.cgi?id=1291161)
+  # terrible hack to avoid invalid certificate date (https://bugzilla.redhat.com/show_bug.cgi?id=1291161)
   exec { 'vdsm_tool_configure':
     command =>
       'date --set "$(date +%Y-%m-%d -d yesterday) $(date +%H:%M:%S)" && \
@@ -45,25 +45,9 @@ class ovirt::node (
     require => Package[$node_service_package],
   }
 
-  # v4 fix 'Sanlock lockspace remove failure', 'Too many open files'
-  exec { 'fix_ovirt_sanlock_limit':
-    command => 'sed -i "/ExecStop=*/a LimitNPROC=65535\nLimitNOFILE=65535" /usr/lib/systemd/system/sanlock.service',
-    path    => [ '/bin', '/usr/bin' ],
-    unless  => 'grep -c LimitNPROC /usr/lib/systemd/system/sanlock.service',
-    before  => Service[$node_service_name],
-    require => Package[$node_service_package],
-  }
-
-  service { $node_service_name:
-    ensure  => $node_service_ensure,
-    enable  => $node_service_enabled,
-    require => Package[$node_service_package],
-  }
-
-  # fix lvmetad is running but disabled http://lists.ovirt.org/pipermail/users/2016-June/040420.html
+  # fix lvmetad is running but disabled (http://lists.ovirt.org/pipermail/users/2016-June/040420.html)
   exec { 'disable_lvmetad':
-    command =>
-      'sed -i "s/use_lvmetad = 1/use_lvmetad = 0/" /etc/lvm/lvm.conf',
+    command => 'sed -i "s/use_lvmetad = 1/use_lvmetad = 0/" /etc/lvm/lvm.conf',
     path    => [ '/bin', '/usr/bin' ],
     unless  => 'grep -c "use_lvmetad = 0" /etc/lvm/lvm.conf',
     require => Package[$node_service_package],
@@ -71,6 +55,20 @@ class ovirt::node (
   service { [ 'lvm2-lvmetad.service', 'lvm2-lvmetad.socket', ]:
     ensure  => 'stopped',
     enable  => false,
+    require => Package[$node_service_package],
+  }
+
+  # fix 'Sanlock lockspace remove failure', 'Too many open files' on Centos 7 with v4+
+  exec { 'fix_ovirt_sanlock_limit':
+    command => 'sed -i "/ExecStop=*/a LimitNPROC=65535\nLimitNOFILE=65535" /usr/lib/systemd/system/sanlock.service',
+    path    => [ '/bin', '/usr/bin' ],
+    unless  => 'grep -c LimitNPROC /usr/lib/systemd/system/sanlock.service',
+    before  => Service[$node_service_name],
+  }
+
+  service { $node_service_name:
+    ensure  => $node_service_ensure,
+    enable  => $node_service_enabled,
     require => Package[$node_service_package],
   }
 
