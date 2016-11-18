@@ -64,6 +64,7 @@ class ovirt::node (
     path    => [ '/bin', '/usr/bin' ],
     unless  => 'grep -c LimitNPROC /usr/lib/systemd/system/sanlock.service',
     before  => Service[$node_service_name],
+    require => Package[$node_service_package],
   }
 
   service { $node_service_name:

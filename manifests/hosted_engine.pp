@@ -101,6 +101,7 @@ class ovirt::hosted_engine (
     path    => [ '/bin', '/usr/bin' ],
     unless  => 'grep -c LimitNPROC /usr/lib/systemd/system/ovirt-ha-agent.service',
     before  => Service[$hosted_engine_service_name],
+    require => Package[$hosted_engine_service_package],
   }
 
   service { $hosted_engine_service_name:
