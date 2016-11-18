@@ -16,10 +16,6 @@ class ovirt (
   $node_service_ensure                  = $ovirt::node_service_ensure,
   $node_service_enabled                 = $ovirt::node_service_enabled,
 
-  $disable_firewalld                    = $ovirt::disable_firewalld,
-  $disable_iptables                     = $ovirt::disable_iptables,
-  $disable_networkmanager               = $ovirt::disable_networkmanager,
-
   $engine_answers_file                  = $ovirt::engine_answers_file,
   $engine_setup_conf_d                  = $ovirt::engine_setup_conf_d,
   $engine_service_package               = $ovirt::engine_service_package,
@@ -40,29 +36,6 @@ class ovirt (
   $hosted_engine_run_engine_setup       = $ovirt::hosted_engine_run_engine_setup,
 
 ) inherits ovirt::params {
-
-  if $disable_firewalld {
-    service { 'firewalld':
-      ensure => stopped,
-      enable => false,
-    }
-  }
-  if $disable_iptables {
-    service { 'iptables':
-      ensure => stopped,
-      enable => false,
-    }
-  }
-  if $disable_networkmanager {
-    service { 'NetworkManager':
-      ensure => stopped,
-      enable => false,
-    }->
-    service { 'network':
-      ensure => running,
-      enable => true,
-    }
-  }
 
   if $ovirt_repo_manage {
     $package_require_supp = "Package[ovirt-release${ovirt_repo_version}]"

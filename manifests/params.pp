@@ -7,10 +7,6 @@ class ovirt::params {
 
   $ovirt_engine_appliance_ensure        = 'absent'
 
-  $disable_firewalld                    = false
-  $disable_iptables                     = false
-  $disable_networkmanager               = false
-
   $node_service_package                 = [ 'vdsm', 'vdsm-cli' ]
   $node_service_package_ensure          = 'installed'
   $node_service_name                    = 'vdsmd'
